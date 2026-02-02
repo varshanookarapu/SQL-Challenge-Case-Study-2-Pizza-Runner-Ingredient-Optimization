@@ -35,4 +35,24 @@ GROUP BY npr.pizza_id
 ORDER BY npr.pizza_id
 
 ```
+**Normalized Table** 
+
+| pizza_id | topping_id | topping_name |
+| -------- | ---------- | ------------ |
+| 1        | 1          | Bacon        |
+| 1        | 2          | BBQ Sauce    |
+| 1        | 3          | Beef         |
+| 1        | 4          | Cheese       |
+| 1        | 5          | Chicken      |
+| 1        | 6          | Mushrooms    |
+| 1        | 8          | Pepperoni    |
+| 1        | 10         | Salami       |
+| 2        | 4          | Cheese       |
+| 2        | 6          | Mushrooms    |
+| 2        | 7          | Onions       |
+| 2        | 9          | Peppers      |
+| 2        | 11         | Tomatoes     |
+| 2        | 12         | Tomato Sauce |
+
+---
 

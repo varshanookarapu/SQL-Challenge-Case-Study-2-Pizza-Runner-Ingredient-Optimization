@@ -55,4 +55,13 @@ ORDER BY npr.pizza_id
 | 2        | 12         | Tomato Sauce |
 
 ---
+**Denormalized Table**
 
+| pizza_id | topping_id       | topping_name                                                                 |
+| -------- | ---------------- | ---------------------------------------------------------------------------- |
+| 1        | 1,2,3,4,5,6,8,10 | Bacon , BBQ Sauce , Beef , Cheese , Chicken , Mushrooms , Pepperoni , Salami |
+| 2        | 4,6,7,9,11,12    | Cheese , Mushrooms , Onions , Peppers , Tomatoes , Tomato Sauce              |
+
+---
+
+[View on DB Fiddle](https://www.db-fiddle.com/f/7VcQKQwsS3CTkGRFG7vu98/65)

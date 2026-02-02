@@ -97,7 +97,6 @@ ORDER BY npr.pizza_id
 
 ---
 
-
 **Question 2:** What was the most commonly added extra?
 
 ---
@@ -138,5 +137,57 @@ nco.extras = npr_pt.topping_id
 GROUP BY extras,npr_pt.topping_name
 ORDER BY max_extras DESC 
 LIMIT 1
+
 ```
+
+<img width="1531" height="132" alt="image" src="https://github.com/user-attachments/assets/961c9f4f-56f8-4d06-8af5-97c82549877d" />
+
+
+
+**Question 3:** What was the most common exclusion?
+
+---
+
+## SQL Code
+
+```sql
+WITH normalized_pizza_recipes AS
+(
+SELECT pizza_id, CAST (TRIM(topping) AS INTEGER) as topping_id
+FROM pizza_recipes ,
+  UNNEST(STRING_TO_ARRAY (toppings, ',')) AS  topping
+), 
+
+
+npr_pt AS
+(
+SELECT pizza_id,npr.topping_id,topping_name 
+FROM normalized_pizza_recipes npr 
+LEFT JOIN pizza_toppings pt ON
+npr.topping_id = pt.topping_id
+ORDER BY pizza_id,topping_id
+)
+,
+
+nco AS 
+(  
+SELECT order_id,customer_id,pizza_id, CAST(TRIM(extra) AS INTEGER) as extras
+FROM customer_orders ,
+UNNEST(STRING_TO_ARRAY(extras,',')) AS extra
+ORDER BY order_id
+)
+
+
+SELECT extras,COUNT(*)  as max_extras,topping_name  FROM nco 
+LEFT JOIN npr_pt ON
+nco.extras = npr_pt.topping_id
+GROUP BY extras,npr_pt.topping_name
+ORDER BY max_extras DESC 
+LIMIT 1
+```
+
+<img width="1672" height="127" alt="image" src="https://github.com/user-attachments/assets/d7c4a03b-4d15-4996-ac27-aad01f61d9ec" />
+
+
+
 

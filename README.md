@@ -33,7 +33,7 @@ SELECT * FROM customer_orders ORDER BY order_id;
 ```
 
 
-**Question 1:** What are the standard ingredients for each pizza?
+**Question 1:** What are the standard ingredients for each pizza? - ( I was a bit confused by the question I initally assumed they were asking for the topping names but its the common ingredients used between two pizzas ) 
 
 ---
 

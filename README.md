@@ -97,6 +97,36 @@ ORDER BY npr.pizza_id
 
 ---
 
+```sql
+WITH pr AS 
+(
+SELECT pizza_id, CAST(TRIM(topping) AS INTEGER ) as topping_id
+FROM pizza_recipes ,
+UNNEST(STRING_TO_ARRAY(toppings, ',')) AS topping
+)
+
+SELECT pr.topping_id, topping_name  FROM
+pr LEFT JOIN pizza_toppings pt ON
+pr.topping_id = pt.topping_id 
+WHERE pr.topping_id  IN (SELECT topping_id FROM pr GROUP BY 
+  topping_id
+  HAVING count(distinct pizza_id) > 1 )
+GROUP BY pr.topping_id ,topping_name
+ORDER BY topping_id
+```
+
+| topping_id | topping_name |
+| ---------- | ------------ |
+| 4          | Cheese       |
+| 6          | Mushrooms    |
+
+---
+
+[View on DB Fiddle](https://www.db-fiddle.com/f/7VcQKQwsS3CTkGRFG7vu98/65)
+
+
+
+
 **Question 2:** What was the most commonly added extra?
 
 ---

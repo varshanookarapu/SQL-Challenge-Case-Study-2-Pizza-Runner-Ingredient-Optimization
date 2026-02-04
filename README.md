@@ -217,6 +217,65 @@ LIMIT 1
 
 <img width="1672" height="127" alt="image" src="https://github.com/user-attachments/assets/d7c4a03b-4d15-4996-ac27-aad01f61d9ec" />
 
+**Question 4:** Generate an order item for each record in the customers_orders table in the format of one of the following:
+Meat Lovers
+Meat Lovers - Exclude Beef
+Meat Lovers - Extra Bacon
+Meat Lovers - Exclude Cheese, Bacon - Extra Mushroom, Peppers
+
+---
+
+## SQL Code
+
+``` sql
+WITH nco AS
+(
+SELECT order_id,pizza_id,CAST (TRIM(exclusion) AS INTEGER ) as exclusions, extras,order_time 
+FROM customer_orders,
+UNNEST(STRING_TO_ARRAY(exclusions,',')) AS  exclusion
+ORDER BY order_id
+),
+
+EXCLUSIONS AS 
+(
+SELECT order_id,nco.pizza_id,STRING_AGG(DISTINCT topping_name , ',' )  as exclusion_topping_name
+FROM nco LEFT JOIN pizza_names pn ON nco.pizza_id = pn.pizza_id 
+LEFT JOIN pizza_toppings pt ON
+nco.exclusions = pt.topping_id
+GROUP BY order_id,nco.pizza_id
+ORDER BY order_id
+),
+
+nco_extras AS
+(
+SELECT order_id,customer_id,pizza_id,CAST (TRIM(extra) AS INTEGER ) as extras,order_time 
+FROM customer_orders,
+UNNEST(STRING_TO_ARRAY(extras,',')) AS  extra
+ORDER BY order_id
+),
+
+EXTRAS AS
+(
+SELECT order_id,nco_extras.pizza_id,STRING_AGG(DISTINCT topping_name , ',' )  as extra_topping_name
+FROM nco_extras LEFT JOIN pizza_names pn ON nco_extras.pizza_id = pn.pizza_id 
+LEFT JOIN pizza_toppings pt ON
+nco_extras.extras = pt.topping_id
+GROUP BY order_id,nco_extras.pizza_id
+ORDER BY order_id
+)
+
+SELECT co.order_id,
+CONCAT( pizza_name, (' -  Exclude  ' || exclusion_topping_name) ,(' -  Extra  ' || extra_topping_name ) ) as order_item
+FROM customer_orders co 
+LEFT JOIN pizza_names pn ON co.pizza_id = pn.pizza_id
+LEFT JOIN EXTRAS e ON co.order_id=e.order_id AND co.pizza_id = e.pizza_id
+LEFT JOIN EXCLUSIONS ex ON co.order_id=ex.order_id AND co.pizza_id = ex.pizza_id
+ORDER BY order_id
+
+```
+
+<img width="930" height="670" alt="image" src="https://github.com/user-attachments/assets/600ea960-50e7-4943-86bd-d87ec67e8f28" />
+
 
 
 

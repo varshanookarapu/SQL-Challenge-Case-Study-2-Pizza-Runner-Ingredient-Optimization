@@ -264,6 +264,9 @@ GROUP BY order_id,nco_extras.pizza_id
 ORDER BY order_id
 )
 
+--  Created Two CTES for Extras and Exclusions to include  order id ,pizza id and topping names in a comma separated list
+-- From those two CTES I joined Customer ORders table and then used string concatenation to get the results in the desired format. 
+
 SELECT co.order_id,
 CONCAT( pizza_name, (' -  Exclude  ' || exclusion_topping_name) ,(' -  Extra  ' || extra_topping_name ) ) as order_item
 FROM customer_orders co 
@@ -273,6 +276,9 @@ LEFT JOIN EXCLUSIONS ex ON co.order_id=ex.order_id AND co.pizza_id = ex.pizza_id
 ORDER BY order_id
 
 ```
+<img width="1371" height="263" alt="image" src="https://github.com/user-attachments/assets/869258ed-1abe-4bc1-a9fa-3f653a02589d" />
+
+<img width="1197" height="258" alt="image" src="https://github.com/user-attachments/assets/57ffdc51-313b-48df-9799-607edd598525" />
 
 <img width="930" height="670" alt="image" src="https://github.com/user-attachments/assets/600ea960-50e7-4943-86bd-d87ec67e8f28" />
 
